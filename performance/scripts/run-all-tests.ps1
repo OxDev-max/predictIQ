@@ -39,12 +39,23 @@ function Run-Test {
     $env:API_URL = $ApiUrl
     $outputFile = "$ReportsDir/$TestName-raw.json"
     
+    # Run k6 without letting a non-zero exit code abort the whole suite.
+    # $ErrorActionPreference = "Stop" would otherwise turn a failed native
+    # command into a terminating error and skip the remaining tests.
+    $prevErrorActionPreference = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
     try {
         k6 run --out "json=$outputFile" $TestFile
+        $exitCode = $LASTEXITCODE
+    } finally {
+        $ErrorActionPreference = $prevErrorActionPreference
+    }
+    
+    if ($exitCode -eq 0) {
         Write-Host "✓ $TestName completed successfully" -ForegroundColor Green
         return $true
-    } catch {
-        Write-Host "✗ $TestName failed: $_" -ForegroundColor Red
+    } else {
+        Write-Host "✗ $TestName failed (exit code $exitCode)" -ForegroundColor Red
         return $false
     }
 }
