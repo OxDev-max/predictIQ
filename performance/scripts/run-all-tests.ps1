@@ -69,6 +69,12 @@ if (-not (Run-Test "stress-test" "backend/k6/stress-test.js")) { $failedTests++ 
 if (-not (Run-Test "spike-test" "backend/k6/spike-test.js")) { $failedTests++ }
 if (-not (Run-Test "rate-limit-test" "backend/k6/rate-limit-test.js")) { $failedTests++ }
 if (-not (Run-Test "cache-test" "backend/k6/cache-test.js")) { $failedTests++ }
+# Subsystem load tests (issue #1620): newsletter, blockchain, and TTS k6
+# scripts exist in backend/k6/ and must be exercised by the runner so their
+# reports are produced alongside the core suite.
+if (-not (Run-Test "newsletter-load-test" "backend/k6/newsletter-load-test.js")) { $failedTests++ }
+if (-not (Run-Test "blockchain-load-test" "backend/k6/blockchain-load-test.js")) { $failedTests++ }
+if (-not (Run-Test "tts-load-test" "backend/k6/tts-load-test.js")) { $failedTests++ }
 
 # Summary
 Write-Host "`n==================================" -ForegroundColor Cyan

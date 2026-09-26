@@ -59,6 +59,11 @@ run_test "spike-test" "backend/k6/spike-test.js" || FAILED_TESTS=$((FAILED_TESTS
 run_test "rate-limit-test" "backend/k6/rate-limit-test.js" || FAILED_TESTS=$((FAILED_TESTS + 1))
 run_test "cache-test" "backend/k6/cache-test.js" || FAILED_TESTS=$((FAILED_TESTS + 1))
 
+# Subsystem load tests (previously omitted from the runner)
+run_test "newsletter-load-test" "backend/k6/newsletter-load-test.js" || FAILED_TESTS=$((FAILED_TESTS + 1))
+run_test "blockchain-load-test" "backend/k6/blockchain-load-test.js" || FAILED_TESTS=$((FAILED_TESTS + 1))
+run_test "tts-load-test" "backend/k6/tts-load-test.js" || FAILED_TESTS=$((FAILED_TESTS + 1))
+
 # Summary
 echo ""
 echo "=================================="
